@@ -1,54 +1,66 @@
 
+def read_dictionary(dictionary_name):
+    dictionary_words = []
+    input_file = open(dictionary_name, "r")
+    for line in input_file:
+        word = line.strip()
+        dictionary_words.append(word)
+    input_file.close()
+    return dictionary_words
 
 
-def cteniSlovniku(nazevSlovniku):
-    slovaSlovniku = []
-    vlozenySoubor = open(nazevSlovnkiu, "r")
-    for radek in vlozenySoubor:
-        slovo = radek.strip()
-        slovaSlovniku.append(slovo)
-    vlozenySoubor.close()
-    return slovaSlovniku
-
-def cteniTextu(nazevTextovehoDokumentu):
-    slova = []
-    vlozenySoubor = open(nazevTextovehoDokumentu, "r")
-    for radek in vlozenySoubor:
-        slovaVRadku = radek.strip().split()
-        for slovo in slovaVRadku:
-            slova.append(slovo.strip(" .,!/':;-_?").lower())
-     vlozenySoubor.close()
-    return slova
+def read_text(text_name):
+    words = []
+    input_file = open(text_name, "r")
+    for line in input_file:
+        words_on_line = line.strip().split()
+        for word in words_on_line:
+            words.append(word.strip(" .,!/':;-_?").lower())
+    input_file.close()
+    return words
 
 
+def find_errors(dictionary_words, text_words):
+    misspelled_words = []
+    for word in text_words:
+        if word not in dictionary_words:
+            misspelled_words.append(word)
+    return misspelled_words
 
-def hledaniChyb(slovaSlvoniku, slovaTextu):
-    chybnaSlova = []
-    for slovo in slovaTextu:
-        if slovo not in slovaSlovniku:
-            chybnaSlova.append(slovo)
-    return chybnaSlova
 
-
-def vypisChyb(seznamChyb):
+def print_errors(error_list):
     print("Slova s pravopisnou chybou jsou: ")
-    for slovo in seznamChyb:
-        print(slovo)
+    for word in error_list:
+        print(word)
 
 
+def edits1(word):
+   splits     = [(word[:i], word[i:]) for i in range(len(word) + 1)]
+   deletes    = [a + b[1:] for a, b in splits if b]
+   transposes = [a + b[1] + b[0] + b[2:] for a, b in splits if len(b)>1]
+   replaces   = [a + c + b[1:] for a, b in splits for c in alphabet if b]
+   inserts    = [a + c + b     for a, b in splits for c in alphabet]
+   return set(deletes + transposes + replaces + inserts)
+
+
+def known(words): return set(w for w in words if w in word)
+
+def correct(word):
+    candidates = known([word]) or known(edits1(word)) or \
+        known_edits2(word) or [word]
+    print("Návrhy na opravu jsou:")
+    return max(candidates, key=misspelled_words.get)
+    print(candidates)
 
 
 def main():
     print("Vítejte v kontrole pravopisu")
-    slovnik = input("Zadejte prosím soubor slovníku: ")
-    text = input("Zadejte prosím soubor s textem ke kontrole: ")
-    vypisSlovniku = cteniSlovniku(slovnik)
-
-    vypisTextu = cteniTextu(text)
-    seznamChyb = hledaniChyb(vypisSlovniku, vypisTextu)
-    vypisChyb(seznamChyb)
-
-
-
+    dictionary = input("Zadejte prosím název souboru slovníku v počítači: ")
+    text = input("Zadejte prosím název souboru s textem ke kontrole: ")
+    dictionary_list = read_dictionary(dictionary)
+    text_list = read_text(text)
+    error_list = find_errors(dictionary_list, text_list)
+    print_errors(error_list)
+    edits1(word)
 
 main()
