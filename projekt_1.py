@@ -73,6 +73,5 @@ def main():
     text_list = read_text(text)
     error_list = find_errors(dictionary_list, text_list)
     print_errors(error_list)
-    edits1(word)
 
 main()
