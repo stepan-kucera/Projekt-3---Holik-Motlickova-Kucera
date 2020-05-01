@@ -64,7 +64,8 @@ def guesses(word):
 def add(word, priority=4):
     dictionary[word.lower().strip()] = priority
 
-
+print()
+    
 def main():
     print("Vítejte v kontrole pravopisu")
     dictionary = input("Zadejte prosím název souboru slovníku v počítači: ")
