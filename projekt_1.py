@@ -67,8 +67,8 @@ def add(word, priority=4):
 
 def main():
     print("Vítejte v kontrole pravopisu")
-    dictionary = input("Zadejte prosím název souboru slovníku v počítači: ")
-    text = input("Zadejte prosím název souboru s textem ke kontrole: ")
+    dictionary = input("Zadejte prosím název textového souboru slovníku v počítači: ")
+    text = input("Zadejte prosím název textového souboru s textem ke kontrole: ")
     dictionary_list = read_dictionary(dictionary)
     text_list = read_text(text)
     error_list = find_errors(dictionary_list, text_list)
